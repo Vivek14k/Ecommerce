@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Login - E-Shop{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 mt-5">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-sign-in-alt"></i> Login</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid gap-2 mt-3">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <a href="{% url 'register' %}" class="btn btn-outline-secondary">Create an account</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

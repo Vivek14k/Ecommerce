@@ -1,0 +1,103 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Home - E-Commerce Store{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="jumbotron p-5 mb-5 text-center shadow-lg">
+    <h1 class="display-3 fw-bold"><i class="fas fa-gift"></i> Welcome to E-Shop!</h1>
+    <p class="lead fs-4">Discover amazing products at unbeatable prices</p>
+    <hr class="my-4 bg-white">
+    <p class="fs-5">Quality products, fast shipping, excellent service</p>
+    {% if not user.is_authenticated %}
+    <a class="btn btn-light btn-lg mt-3" href="{% url 'register' %}">
+        <i class="fas fa-user-plus"></i> Join Now
+    </a>
+    {% endif %}
+</div>
+
+<!-- Products Section -->
+<div class="mb-4">
+    <h2 class="text-center mb-4">
+        <i class="fas fa-fire text-danger"></i> Featured Products
+    </h2>
+    <hr class="w-25 mx-auto mb-4" style="height: 3px; background: linear-gradient(to right, #667eea, #764ba2);">
+</div>
+
+{% if products %}
+<div class="row g-4">
+    {% for product in products %}
+    <div class="col-lg-4 col-md-6">
+        <div class="card product-card">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+            {% else %}
+            <img src="https://via.placeholder.com/400x300/667eea/ffffff?text={{ product.name }}" 
+                 class="card-img-top product-img" alt="{{ product.name }}">
+            {% endif %}
+            <div class="card-body">
+                <span class="badge bg-info mb-2">{{ product.category.name }}</span>
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="h4 text-success mb-0">
+                        <i class="fas fa-tag"></i> ${{ product.price }}
+                    </span>
+                    {% if product.stock > 0 %}
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle"></i> In Stock: {{ product.stock }}
+                    </span>
+                    {% else %}
+                    <span class="badge bg-danger">
+                        <i class="fas fa-times-circle"></i> Out of Stock
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-primary">
+                        <i class="fas fa-eye"></i> View Details
+                    </a>
+                    {% if user.is_authenticated and product.stock > 0 %}
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </a>
+                    {% elif not user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="btn btn-warning">
+                        <i class="fas fa-sign-in-alt"></i> Login to Buy
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center shadow">
+    <i class="fas fa-info-circle fa-3x mb-3"></i>
+    <h4>No products available</h4>
+    <p>Please check back later for exciting new products!</p>
+</div>
+{% endif %}
+
+<!-- Features Section -->
+<div class="row mt-5 pt-5">
+    <div class="col-md-4 text-center mb-4">
+        <i class="fas fa-shipping-fast fa-4x text-primary mb-3"></i>
+        <h4>Fast Shipping</h4>
+        <p class="text-muted">Get your orders delivered quickly</p>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <i class="fas fa-lock fa-4x text-success mb-3"></i>
+        <h4>Secure Payment</h4>
+        <p class="text-muted">100% secure transactions</p>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <i class="fas fa-headset fa-4x text-info mb-3"></i>
+        <h4>24/7 Support</h4>
+        <p class="text-muted">Always here to help you</p>
+    </div>
+</div>
+{% endblock %}

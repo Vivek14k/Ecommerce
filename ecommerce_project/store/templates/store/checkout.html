@@ -1,0 +1,144 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Checkout - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h2><i class="fas fa-credit-card text-success"></i> Checkout</h2>
+    <p class="text-muted">Complete your purchase</p>
+</div>
+
+<!-- Progress Indicator -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="progress" style="height: 30px;">
+            <div class="progress-bar bg-success" style="width: 75%;">
+                <strong>Step 3 of 4 - Shipping Information</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-shipping-fast"></i> Shipping Information</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="full_name" class="form-label fw-bold">
+                                <i class="fas fa-user"></i> Full Name *
+                            </label>
+                            <input type="text" class="form-control form-control-lg" 
+                                   id="full_name" name="full_name" required
+                                   placeholder="Enter your full name">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="email" class="form-label fw-bold">
+                                <i class="fas fa-envelope"></i> Email Address *
+                            </label>
+                            <input type="email" class="form-control form-control-lg" 
+                                   id="email" name="email" value="{{ user.email }}" required
+                                   placeholder="your.email@example.com">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="address" class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt"></i> Street Address *
+                            </label>
+                            <textarea class="form-control form-control-lg" 
+                                      id="address" name="address" rows="3" required
+                                      placeholder="Enter your full address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label fw-bold">
+                                <i class="fas fa-city"></i> City *
+                            </label>
+                            <input type="text" class="form-control form-control-lg" 
+                                   id="city" name="city" required
+                                   placeholder="City name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="postal_code" class="form-label fw-bold">
+                                <i class="fas fa-mail-bulk"></i> Postal Code *
+                            </label>
+                            <input type="text" class="form-control form-control-lg" 
+                                   id="postal_code" name="postal_code" required
+                                   placeholder="ZIP/Postal code">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="save_info">
+                        <label class="form-check-label" for="save_info">
+                            Save this information for next time
+                        </label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg shadow">
+                            <i class="fas fa-check-circle"></i> Place Order
+                        </button>
+                        <a href="{% url 'cart' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Cart
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Order Summary -->
+        <div class="card shadow-lg border-0 sticky-top mb-3" style="top: 100px;">
+            <div class="card-header bg-gradient text-white"
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h5 class="mb-0"><i class="fas fa-file-invoice-dollar"></i> Order Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Subtotal:</span>
+                    <strong>${{ total }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Shipping:</span>
+                    <strong class="text-success">Free</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Tax:</span>
+                    <strong>$0.00</strong>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <h4 class="fw-bold">Total:</h4>
+                    <h4 class="text-success fw-bold">${{ total }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Info -->
+        <div class="card shadow border-0">
+            <div class="card-body text-center">
+                <i class="fas fa-lock fa-3x text-success mb-3"></i>
+                <h6>Secure Checkout</h6>
+                <p class="text-muted small mb-0">Your payment information is encrypted and secure</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

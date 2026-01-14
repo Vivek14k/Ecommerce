@@ -1,0 +1,93 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ product.name }} - E-Commerce Store{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Products</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-lg border-0">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 500px; object-fit: cover;">
+            {% else %}
+            <img src="https://via.placeholder.com/600x500/667eea/ffffff?text={{ product.name }}" 
+                 class="card-img-top" alt="{{ product.name }}">
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card shadow-lg border-0 p-4">
+            <span class="badge bg-info mb-2 w-50">{{ product.category.name }}</span>
+            <h1 class="display-5 fw-bold mb-3">{{ product.name }}</h1>
+            
+            <div class="mb-3">
+                <span class="text-warning">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </span>
+                <span class="text-muted ms-2">(4.5 rating)</span>
+            </div>
+
+            <hr>
+            
+            <h2 class="text-success mb-3">
+                <i class="fas fa-dollar-sign"></i>{{ product.price }}
+            </h2>
+            
+            <p class="lead mb-4">{{ product.description }}</p>
+            
+            <div class="mb-4">
+                <h5><strong>Availability:</strong></h5>
+                {% if product.stock > 0 %}
+                <span class="badge bg-success fs-6">
+                    <i class="fas fa-check-circle"></i> In Stock ({{ product.stock }} units available)
+                </span>
+                {% else %}
+                <span class="badge bg-danger fs-6">
+                    <i class="fas fa-times-circle"></i> Out of Stock
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <h5><strong>Product Details:</strong></h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> High Quality Product</li>
+                    <li><i class="fas fa-check text-success"></i> Fast & Free Shipping</li>
+                    <li><i class="fas fa-check text-success"></i> 30 Days Return Policy</li>
+                    <li><i class="fas fa-check text-success"></i> 1 Year Warranty</li>
+                </ul>
+            </div>
+
+            {% if user.is_authenticated and product.stock > 0 %}
+            <div class="d-grid gap-2 mb-3">
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success btn-lg shadow">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </a>
+            </div>
+            {% elif not user.is_authenticated %}
+            <div class="alert alert-warning shadow">
+                <i class="fas fa-exclamation-triangle"></i> 
+                Please <a href="{% url 'login' %}" class="alert-link fw-bold">login</a> to add items to your cart.
+            </div>
+            {% endif %}
+
+            <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Products
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
